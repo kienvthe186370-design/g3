@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sona | Đăng nhập</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+
+    <style>
+        /* CSS tùy chỉnh cho trang Login */
+        .login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f7f7f7; /* Màu nền nhẹ */
+        }
+        .login-form-wrap {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .login-form-wrap h2 {
+            margin-bottom: 30px;
+            text-align: center;
+            color: #333;
+            font-family: 'Cabin', sans-serif;
+            font-weight: 700;
+        }
+        /* Tùy chỉnh nút Đăng nhập theo style của template (primary-btn) */
+        .primary-btn.full-width {
+            width: 100%;
+            padding: 12px 0;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-page">
+        <div class="login-form-wrap">
+            <h2>Đăng nhập vào Sona</h2>
+            <form action="#" method="POST">
+                
+                <div class="form-group">
+                    <label for="username">Tên người dùng (hoặc Email)</label>
+                    <input type="text" class="form-control" id="username" placeholder="Nhập tên người dùng hoặc email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu" required>
+                </div>
+
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Ghi nhớ tôi</label>
+                </div>
+
+                <button type="submit" class="primary-btn full-width">Đăng nhập</button>
+
+                <div class="text-center mt-3">
+                    <a href="#">Quên mật khẩu?</a>
+                </div>
+                
+                <div class="text-center mt-3 pt-3 border-top">
+                    <p>Chưa có tài khoản? <a href="#">Đăng ký ngay</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
