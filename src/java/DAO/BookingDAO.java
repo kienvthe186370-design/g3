@@ -4,7 +4,7 @@
  */
 package DAO;
 
-import Model.Booking;
+import entity.Booking;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -51,7 +51,67 @@ public class BookingDAO {
         }
         return false;
     }
-    
+    public boolean createBooking(Booking booking, int roomTypeId, int quantity, BigDecimal pricePerNight) {
+    boolean result = false;
+    try {
+        conn = new DBContext().getConnection();
+        
+        // TẮT Auto Commit để bắt đầu Transaction
+        conn.setAutoCommit(false);
+
+        // Bước 1: Tạo UUID cho Booking ID (Vì SQL để là uniqueidentifier)
+        String newBookingId = UUID.randomUUID().toString();
+        booking.setBookingId(newBookingId);
+
+        // --- SỬA: XÓA [cite_start] Ở ĐÂY ---
+        String sqlBooking = "INSERT INTO Bookings (bookingId, userId, guestName, guestPhone, checkInDate, checkOutDate, totalDeposit, status, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, GETDATE())";
+        ps = conn.prepareStatement(sqlBooking);
+        ps.setString(1, newBookingId);
+        
+        if (booking.getUserId() > 0) ps.setInt(2, booking.getUserId()); 
+        else ps.setObject(2, null); // Khách vãng lai
+
+        ps.setString(3, booking.getGuestName());
+        ps.setString(4, booking.getGuestPhone());
+        ps.setTimestamp(5, booking.getCheckInDate());
+        ps.setTimestamp(6, booking.getCheckOutDate());
+        ps.setBigDecimal(7, booking.getTotalDeposit());
+        ps.setString(8, "Confirmed");
+        
+        ps.executeUpdate();
+
+        // --- SỬA: XÓA [cite_start] Ở ĐÂY ---
+        // Đây là bước quan trọng để liên kết Booking với Loại phòng
+        String sqlDetail = "INSERT INTO BookingDetails (bookingId, roomTypeId, quantity, pricePerNight) VALUES (?, ?, ?, ?)";
+        PreparedStatement psDetail = conn.prepareStatement(sqlDetail);
+        psDetail.setString(1, newBookingId);
+        psDetail.setInt(2, roomTypeId);
+        psDetail.setInt(3, quantity);
+        psDetail.setBigDecimal(4, pricePerNight);
+        
+        psDetail.executeUpdate();
+
+        // Bước 4: Commit Transaction (Lưu tất cả thay đổi)
+        conn.commit();
+        result = true;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        try {
+            if (conn != null) conn.rollback(); // Nếu lỗi thì hoàn tác
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    } finally {
+        try {
+            if (conn != null) conn.setAutoCommit(true); // Bật lại auto commit
+            closeResources();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    return result;
+}
     
     private void closeResources() {
         try {
